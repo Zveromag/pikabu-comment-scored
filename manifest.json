@@ -1,0 +1,36 @@
+{
+	"manifest_version": 2,
+	"default_locale": "ru",
+	"name": "__MSG_extName__",
+	"version": "0.0.5",
+	"description": "__MSG_extDesc__",
+	"icons": {
+		"16": "icons/16.png",
+		"48": "icons/48.png",
+		"128": "icons/128.png"
+	},
+	"browser_action": {
+		"default_title": "Генератор оценок пикабу"
+	},
+	"permissions": [
+		"background"
+	],
+	"background": {
+		"scripts": [
+			"js/background.js"
+		],
+		"persistent": false
+	},
+	"content_scripts": [{
+			"matches": [
+				"https://pikabu.ru/*"
+			],
+			"css": [
+				"css/load.css"
+			],
+			"js": [
+				"js/jq.js",
+				"js/load.js"
+			]
+		}]
+}
