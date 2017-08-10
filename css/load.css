@@ -112,3 +112,28 @@
 .scored__link--active {
 	color: #f00 !important;
 }
+.scored-message {
+	position: absolute;
+	user-select: none;
+	top: 0;
+	left: 0;
+	text-align: center;
+	padding: 10px;
+	box-sizing: border-box;
+	opacity: 0;
+	width: 100%;
+	transform: translateY(-100%);
+	transition: all .4s;
+}
+.scored-message.show {
+	opacity: 1;
+	transform: translateY(0);
+}
+.scored-message--info {
+	background-color: #329ce1;
+	color: #fff;
+}
+.scored-message--error {
+	background-color: #f00;
+	color: #fff;
+}

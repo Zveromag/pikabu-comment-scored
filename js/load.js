@@ -3,6 +3,7 @@ function createWindow() {
 	this.container = null;
 	var targetEvent = targetName.bind(this);
 	var controlsEvent = scored.bind(this);
+	var messages = messages.bind(this);
 	var link;
 
 	this.showWindow = function() {
@@ -19,9 +20,6 @@ function createWindow() {
 											'<div class="scored__score">' +
 												'<span class="scored__up scored__control"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"><path d="M872.7 563.9c45 0 81.4-38.2 81.4-85.2s-36.4-85.2-81.4-85.2h-262s33.1-36.3 33.1-170.4c0-101.6-48-213.8-120.9-213-97.3.9-64 122.5-73.8 213-9.7 90.5-105.5 151.8-105.5 209.7-1.9 147.7-.1 450.8-.1 450.8 0 58.9 45.5 106.5 101.7 106.5h346c44.9 0 81.4-38.2 81.4-85.2 0-17.7-5.2-34.1-13.9-47.7 31.8-11.7 54.7-43 54.7-80.1 0-17.7-5.2-34.1-14-47.7 31.7-11.6 54.6-43 54.6-80.1.1-47.3-36.4-85.4-81.3-85.4zM192.3 393.5h-89.5c-36.5 0-61.5 29.1-56.1 63.5l79.4 504.8c2.5 15.7 23.5 28.2 47.1 28.2h42.6c23.6 0 42.6-12.4 42.6-28.2V457c0-34.4-29.6-63.5-66.1-63.5z"/></svg></span>' +
 												'<span class="scored__down scored__control"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"><path d="M872.7 563.9c45 0 81.4-38.2 81.4-85.2s-36.4-85.2-81.4-85.2h-262s33.1-36.3 33.1-170.4c0-101.6-48-213.8-120.9-213-97.3.9-64 122.5-73.8 213-9.7 90.5-105.5 151.8-105.5 209.7-1.9 147.7-.1 450.8-.1 450.8 0 58.9 45.5 106.5 101.7 106.5h346c44.9 0 81.4-38.2 81.4-85.2 0-17.7-5.2-34.1-13.9-47.7 31.8-11.7 54.7-43 54.7-80.1 0-17.7-5.2-34.1-14-47.7 31.7-11.6 54.6-43 54.6-80.1.1-47.3-36.4-85.4-81.3-85.4zM192.3 393.5h-89.5c-36.5 0-61.5 29.1-56.1 63.5l79.4 504.8c2.5 15.7 23.5 28.2 47.1 28.2h42.6c23.6 0 42.6-12.4 42.6-28.2V457c0-34.4-29.6-63.5-66.1-63.5z"/></svg></span>' +
-											'</div>' +
-											'<div class="scored__desc" style="display: none">Оценок проставлено: ' +
-												'<strong class="scored__count">10</strong>' +
 											'</div>';
 		this.container = document.createElement('div');
 		this.container.className = 'scored';
@@ -59,7 +57,6 @@ function createWindow() {
 			this.target.removeEventListener('click', controlsEvent);
 		}.bind(this))
 
-		console.log(link);
 		link.forEach(function(item) {
 			item.classList.remove('scored__link--active');
 		})
@@ -68,6 +65,11 @@ function createWindow() {
 
 	function targetName() {
 		this.target.classList.toggle('scored__target--active');
+
+		if (this.target.classList.contains('scored__target--active')) {
+			messages('Кликните по имени пользователя для его захвата', 'info');
+		}
+
 		link = this.body.querySelectorAll('.b-comment__user a');
 		var self = this;
 
@@ -87,8 +89,12 @@ function createWindow() {
 	function scored(event) {
 		var nick = this.input.value;
 		var nicks = this.body.querySelectorAll('.b-comment__user');
-		var descStr = this.container.querySelector('.scored__desc');
 		var count = 0;
+
+		if (this.input.value === '') {
+			messages('Пожалуйста укажите имя пользователя', 'error');
+			return;
+		}
 
 		if (event.target.closest('.scored__up') || event.target.classList.contains('scored__up')) {
 			nicks.forEach(function(item) {
@@ -131,14 +137,36 @@ function createWindow() {
 			})
 		}
 
-		descStr.querySelector('.scored__count').textContent = count;
-		descStr.style.display = 'block';
+		messages('Оценок проставлено: ' + count, 'info');
 
 	}
 
 	function trigger(e, element) {
 		var event = new Event('click', {bubbles: true});
 		element.dispatchEvent(event);
+	}
+
+	function messages(message, prefix) {
+		var mess = document.createElement('div');
+		mess.className = 'scored-message scored-message--' + prefix;
+		mess.textContent = message;
+
+		if (this.container.querySelector('.scored-message')) {
+			this.container.querySelector('.scored-message').remove();
+		}
+
+		this.container.appendChild(mess);
+
+		setTimeout(function() {
+			mess.classList.add('show');
+		}, 0);
+
+		setTimeout(function() {
+			mess.classList.remove('show');
+			mess.addEventListener('transitionend', function(){
+				mess.remove();
+			}, { once: true})
+		}, 3000);
 	}
 }
 
