@@ -12,6 +12,8 @@ function createWindow() {
 	var messages = messages.bind(this);
 	var settings = settings.bind(this);
 	var showList = showList.bind(this);
+	var removeUser = removeUser.bind(this);
+	var findUser = findUser.bind(this);
 	var link;
 	var autorName = (document.querySelector('.b-user-menu__header a')) ? document.querySelector('.b-user-menu__header a').textContent : 'Анонимус'
 
@@ -92,11 +94,16 @@ function createWindow() {
 		var settingControl = this.container.querySelector('.scored__settings');
 
 		settingControl.addEventListener('click', settings.bind(this));
+
+		if (this.ls.getItem('useList') === 'true') {
+			findUser();
+		}
 	}
 
 	this.hide = function() {
 		this.container.remove();
 		this.container = null;
+
 		this.target.removeEventListener('click', targetEvent);
 
 		this.controls.forEach(function(control) {
@@ -106,7 +113,6 @@ function createWindow() {
 		link.forEach(function(item) {
 			item.classList.remove('scored__link--active');
 		})
-
 	}
 
 	function targetName() {
@@ -298,9 +304,12 @@ function createWindow() {
 	function showList() {
 		this.userList = JSON.parse(this.ls.getItem('list'));
 
-		console.log(this.container.querySelectorAll('.users-list__item').length > 0);
-
 		if (this.container.querySelectorAll('.users-list__item').length > 0) {
+
+			this.container.querySelectorAll('.remove-user').forEach(function (item) {
+				item.removeEventListener('click', removeUser);
+			}.bind(this));
+
 			this.container.querySelectorAll('.users-list__item').forEach(function(item) {
 				item.remove();
 			})
@@ -323,7 +332,7 @@ function createWindow() {
 		}.bind(this), { once: true });
 
 		this.container.querySelectorAll('.remove-user').forEach(function (item) {
-			item.addEventListener('click', removeUser.bind(this));
+			item.addEventListener('click', removeUser);
 		}.bind(this))
 	}
 
@@ -334,6 +343,22 @@ function createWindow() {
 		this.ls.setItem('list', JSON.stringify(this.userList));
 		messages('Пользователь ' + userName + ' удален', 'info');
 		showList();
+	}
+
+	function findUser() {
+		var allNicks = this.body.querySelectorAll('.b-comment__user span');
+		var userListLength = this.userList.length;
+		var i;
+
+		allNicks.forEach(function(nick) {
+			for (i = 0; i < userListLength; i++) {
+				if (nick.textContent === this.userList[i]) {
+					nick.classList.add('finded-nick')
+				}
+			}
+
+		}.bind(this))
+
 	}
 }
 

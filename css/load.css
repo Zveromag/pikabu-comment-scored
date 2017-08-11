@@ -270,3 +270,8 @@
 .users-list__item:hover .remove-user {
 	opacity: 1;
 }
+.finded-nick {
+	background: #f00;
+	color: #fff;
+	padding: 3px;
+}
