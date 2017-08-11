@@ -6,7 +6,7 @@ function createWindow() {
 		useList: 'false',
 		list: '[]'
 	}
-	this.userList = JSON.parse(this.ls.getItem('list'));
+	this.userList = (JSON.parse(this.ls.getItem('list'))) ? JSON.parse(this.ls.getItem('list')) : [];
 	var targetEvent = targetName.bind(this);
 	var controlsEvent = scored.bind(this);
 	var messages = messages.bind(this);
@@ -286,6 +286,7 @@ function createWindow() {
 			this.userList.push(nickName);
 			this.ls.setItem('list', JSON.stringify(this.userList));
 			messages('Пользователь ' + nickName + ' добавлен в список', 'info');
+			findUser();
 		}
 	}
 
