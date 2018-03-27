@@ -125,7 +125,7 @@
 	overflow: hidden !important;
 	width: 0 !important;
 }
-.scored__link--active {
+.scored__link--active span {
 	color: #f00 !important;
 }
 .scored-message {

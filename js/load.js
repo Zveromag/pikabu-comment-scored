@@ -15,7 +15,7 @@ function createWindow() {
 	var removeUser = removeUser.bind(this);
 	var findUser = findUser.bind(this);
 	var link;
-	var autorName = (document.querySelector('.b-user-menu__header a')) ? document.querySelector('.b-user-menu__header a').textContent : 'Анонимус'
+	var autorName = (document.querySelector('.user__nick_big')) ? document.querySelector('.user__nick_big').textContent : 'Анонимус'
 
 	var iconClose = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"><path d="M524.1,500L985,39.1c6.7-6.7,6.7-17.4,0-24.1c-6.7-6.7-17.4-6.7-24.1,0L500,475.9L39.1,15C32.4,8.4,21.6,8.4,15,15c-6.7,6.7-6.7,17.4,0,24.1L475.9,500L15,960.9c-6.7,6.7-6.7,17.4,0,24.1c3.3,3.3,7.7,5,12,5c4.4,0,8.7-1.7,12-5L500,524.1L960.9,985c3.3,3.3,7.7,5,12,5s8.7-1.7,12-5c6.7-6.7,6.7-17.4,0-24.1L524.1,500z"/></svg>';
 	var iconSettings = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"><path d="M908.3,10H91.7C46.6,10,10,46.6,10,91.7v816.7c0,45.1,36.6,81.7,81.7,81.7h816.7c45.1,0,81.7-36.6,81.7-81.7V91.7C990,46.6,953.4,10,908.3,10z M949.2,908.3c0,22.6-18.3,40.8-40.8,40.8H91.7c-22.6,0-40.8-18.3-40.8-40.8V91.7c0-22.6,18.3-40.8,40.8-40.8h816.7c22.6,0,40.8,18.3,40.8,40.8L949.2,908.3L949.2,908.3z"/><path d="M806.2 479.6h-64.1c-9.1-35.2-40.8-61.3-78.8-61.3-38 0-69.7 26.1-78.8 61.3H193.7c-11.3 0-20.4 9.2-20.4 20.4 0 11.3 9.2 20.4 20.4 20.4h390.8c9.1 35.2 40.8 61.3 78.8 61.3 38 0 69.7-26.1 78.8-61.3h64.1c11.3 0 20.4-9.2 20.4-20.4C826.7 488.7 817.5 479.6 806.2 479.6zM698.5 520.4c-7.1 12.2-20.1 20.4-35.2 20.4-15.1 0-28.1-8.3-35.2-20.4-3.5-6-5.7-12.9-5.7-20.4 0-7.5 2.2-14.4 5.7-20.4 7.1-12.1 20.1-20.4 35.2-20.4 15.1 0 28.1 8.3 35.2 20.4 3.5 6 5.7 12.9 5.7 20.4C704.2 507.5 702 514.4 698.5 520.4zM806.2 234.6H415.4c-9.1-35.2-40.8-61.3-78.8-61.3-38 0-69.7 26.1-78.8 61.3h-64.2c-11.3 0-20.4 9.2-20.4 20.4 0 11.3 9.2 20.4 20.4 20.4h64.2c9.1 35.2 40.8 61.3 78.8 61.3 38 0 69.7-26.1 78.8-61.3h390.8c11.3 0 20.4-9.2 20.4-20.4C826.7 243.7 817.5 234.6 806.2 234.6zM371.8 275.4c-7.1 12.2-20.1 20.4-35.2 20.4-15.1 0-28.1-8.3-35.2-20.4-3.5-6-5.7-12.9-5.7-20.4s2.2-14.4 5.7-20.4c7.1-12.1 20.1-20.4 35.2-20.4 15.1 0 28.1 8.3 35.2 20.4 3.5 6 5.7 12.9 5.7 20.4C377.5 262.5 375.3 269.4 371.8 275.4zM806.2 724.6H415.4c-9.1-35.2-40.8-61.3-78.8-61.3-38 0-69.7 26.1-78.8 61.3h-64.2c-11.3 0-20.4 9.2-20.4 20.4s9.2 20.4 20.4 20.4h64.2c9.1 35.2 40.8 61.3 78.8 61.3 38 0 69.7-26.1 78.8-61.3h390.8c11.3 0 20.4-9.2 20.4-20.4C826.7 733.7 817.5 724.6 806.2 724.6zM371.8 765.4c-7.1 12.2-20.1 20.4-35.2 20.4-15.1 0-28.1-8.3-35.2-20.4-3.5-6-5.7-12.9-5.7-20.4 0-7.5 2.2-14.4 5.7-20.4 7.1-12.1 20.1-20.4 35.2-20.4 15.1 0 28.1 8.3 35.2 20.4 3.5 6 5.7 12.9 5.7 20.4C377.5 752.5 375.3 759.4 371.8 765.4z"/></svg>';
@@ -122,7 +122,10 @@ function createWindow() {
 			messages('Кликните по имени пользователя для его захвата', 'info');
 		}
 
-		link = this.body.querySelectorAll('.b-comment__user a');
+		link = [].slice.call(this.body.querySelectorAll('.user__nick'));
+		link = link.map(function(span) {
+			return span.parentNode;
+		})
 		var self = this;
 
 		link.forEach(function(item) {
@@ -140,7 +143,7 @@ function createWindow() {
 
 	function scored(event) {
 		var nick = this.input.value;
-		var nicks = this.body.querySelectorAll('.b-comment__user');
+		var nicks = this.body.querySelectorAll('span.user__nick');
 		var count = 0;
 
 		if (this.input.value.trim() === '') {
@@ -150,41 +153,22 @@ function createWindow() {
 
 		if (event.target.closest('.scored__up') || event.target.classList.contains('scored__up')) {
 			nicks.forEach(function(item) {
-				var level = item.closest('[data-level]').dataset.level;
-
-				if (item.querySelector('span').textContent === nick) {
+				if (item.textContent === nick) {
 					count += 1;
 
-					var blocks = document.querySelectorAll('.b-comments_level_0');
-					blocks.forEach(function(item) {
-						item.classList.add('visible-score');
-					})
-
-					var arrow = item.closest('.b-comment__header').querySelector('.b-comment__rating-up');
-					trigger('click', arrow);
-
-					blocks.forEach(function(item) {
-						item.classList.remove('visible-score');
-					})
+					var arrow = item.closest('.comment__header').querySelector('.comment__rating-up');
+					trigger('click', arrow, count);
 				}
 			})
 		}
 		else {
 			nicks.forEach(function(item) {
-				if (item.querySelector('span').textContent === nick) {
+				if (item.textContent === nick) {
 					count += 1;
 
-					var blocks = document.querySelectorAll('.b-comments_level_0');
-					blocks.forEach(function(item) {
-						item.classList.add('visible-score');
-					})
+					var arrow = item.closest('.comment__header').querySelector('.comment__rating-down');
+					trigger('click', arrow, count);
 
-					var arrow = item.closest('.b-comment__header').querySelector('.b-comment__rating-down');
-					trigger('click', arrow);
-
-					blocks.forEach(function(item) {
-						item.classList.remove('visible-score');
-					})
 				}
 			})
 		}
@@ -193,9 +177,23 @@ function createWindow() {
 
 	}
 
-	function trigger(e, element) {
+	function trigger(e, element, count) {
+		var oldCount = count;
+		var isCount = 0;
+		var blocks = document.querySelectorAll('.comment__children[style="display: none"]');
+
+		blocks.forEach(function (item) {
+			item.style.display = 'block';
+		})
+
+		if (oldCount === isCount) {
+			item.style.display = '';
+		}
+
 		var event = new Event('click', {bubbles: true});
 		element.dispatchEvent(event);
+		isCount++;
+
 	}
 
 	function messages(message, prefix) {
@@ -347,7 +345,7 @@ function createWindow() {
 	}
 
 	function findUser() {
-		var allNicks = this.body.querySelectorAll('.b-comment__user span');
+		var allNicks = this.body.querySelectorAll('.user__nick');
 		var userListLength = this.userList.length;
 		var i;
 
